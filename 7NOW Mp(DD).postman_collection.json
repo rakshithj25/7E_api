@@ -1,0 +1,389 @@
+{
+	"info": {
+		"_postman_id": "a68c4ced-7b42-4a8a-9710-863f4fbf5657",
+		"name": "7NOW Marketplace (DD)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Access Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f7d5fe0b-989d-406c-9b33-c29a14758a2b",
+								"exec": [
+									"try {",
+									"    var data = JSON.parse(responseBody);",
+									"    postman.setEnvironmentVariable(\"mp_access_token\", data.access_token);",
+									"} catch(e){",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "{{client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{client_sec}}",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text",
+									"disabled": true
+								}
+							],
+							"options": {
+								"urlencoded": {}
+							}
+						},
+						"url": {
+							"raw": "{{mp_auth}}/accesstoken?grant_type=client_credentials",
+							"host": [
+								"{{mp_auth}}"
+							],
+							"path": [
+								"accesstoken"
+							],
+							"query": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Store",
+			"item": [
+				{
+					"name": "Store Details",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{mp_access_token}}"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{mp_base}}/store/33369",
+							"host": [
+								"{{mp_base}}"
+							],
+							"path": [
+								"store",
+								"33369"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Store Menu",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{mp_access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{mp_base}}/store/33369/menu",
+							"host": [
+								"{{mp_base}}"
+							],
+							"path": [
+								"store",
+								"33369",
+								"menu"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List All Stores",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{mp_access_token}}"
+							}
+						],
+						"url": {
+							"raw": "{{mp_base}}/stores",
+							"host": [
+								"{{mp_base}}"
+							],
+							"path": [
+								"stores"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "Verify",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{mp_access_token}}"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"action\": \"verify\",\n    \"source\": \"grubhub\",\n    \"data\": {\n        \"store_id\": \"33369\",\n        \"items\": [\n            {\n                \"item_id\": \"105047-5-12\",\n                \"price\": 1839,\n                \"qty\": 1\n            },\n            {\n                \"item_id\": \"100485-5-18\",\n                \"price\": 2069,\n                \"qty\": 2\n            }\n        ],\n        \"shipping\": {\n            \"dropoff\": {\n                \"country\": \"US\",\n                \"city\": \"Irving\",\n                \"state\": \"TX\",\n                \"zip\": \"75082\"\n            }\n        },\n        \"user_profile\": {\n            \"first_name\": \"MP\",\n            \"last_name\": \"Test\"\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{mp_base}}/order",
+							"host": [
+								"{{mp_base}}"
+							],
+							"path": [
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Checkout",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{mp_access_token}}",
+								"type": "text"
+							},
+							{
+								"key": "X-SEI-Market",
+								"value": "doordash",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"action\": \"checkout\",\n    \"source\": \"grubhub\",\n    \"data\": {\n        \"store_id\": \"33369\",\n        \"items\": [\n            {\n                \"item_id\": \"131389-0-1-2\",\n                \"price\": 249,\n                \"qty\": 2\n            }\n        ],\n        \"shipping\": {\n            \"dropoff\": {\n                \"country\": \"US\",\n                \"city\": \"Irving\",\n                \"state\": \"TX\",\n                \"zip\": \"75082\"\n            }\n        },\n        \"user_profile\": {\n            \"first_name\": \"MP\",\n            \"last_name\": \"Test\"\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{mp_base}}/order",
+							"host": [
+								"{{mp_base}}"
+							],
+							"path": [
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Submit",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{mp_access_token}}"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"action\": \"submit\",\n    \"source\": \"grubhub\",\n    \"data\": {\n    \t\"order_id\": \"df205e42-6488-471c-aa44-c06735595ae4\",\n        \"store_id\": \"12202\",\n        \"items\": [\n            {\n                \"item_id\": \"105047-5-12\",\n                \"name\": \"White Claw Variety 12 Pack 12oz Can\",\n                \"price\": 1839,\n                \"qty\": 1,\n                \"available\": true,\n                \"tax\": 152,\n                \"tax_rate\": \"0.0825\"\n            },\n            {\n                \"item_id\": \"100485-5-18\",\n                \"name\": \"Miller Lite 18 Pack 12oz Can\",\n                \"price\": 2069,\n                \"qty\": 2,\n                \"available\": true,\n                \"tax\": 341,\n                \"tax_rate\": \"0.0825\"\n            }\n        ],\n        \"shipping\": {\n            \"dropoff\": {\n                \"country\": \"US\",\n                \"city\": \"Irving\",\n                \"state\": \"TX\",\n                \"zip\": \"75082\"\n            }\n        },\n        \"user_profile\": {\n            \"first_name\": \"MP\",\n            \"last_name\": \"Test\"\n        },\n        \"store_prep_time\": 5,\n        \"tax\": 493,\n        \"subtotal\": 3908,\n        \"total\": 4401,\n        \"total_deposit_amount\": 0\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{mp_base}}/order",
+							"host": [
+								"{{mp_base}}"
+							],
+							"path": [
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{apiKey}}",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{mp_access_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"action\": \"cancel\",\n    \"source\": \"grubhub\",\n    \"data\": {\n        \"order_id\": \"1572041304789\",\n        \"origin\": \"customer\",\n        \"reason\": \"test\"\n    }\n}",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{mp_base}}/order",
+							"host": [
+								"{{mp_base}}"
+							],
+							"path": [
+								"order"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Webhook",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{mp_access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"source\": \"grubhub\",\n    \"webhooks\": [\n        {\n            \"type\": \"store\",\n            \"event\": \"store_status\",\n            \"method\": \"POST\",\n            \"url\": \"url to invoke\"\n        },\n        {\n            \"type\": \"store\",\n            \"event\": \"menu_item_status\",\n            \"method\": \"POST\",\n            \"url\": \"url to invoke\"\n        },\n        {\n            \"type\": \"order\",\n            \"event\": \"order_status\",\n            \"method\": \"POST\",\n            \"url\": \"url to invoke\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{mp_base}}/webhook",
+							"host": [
+								"{{mp_base}}"
+							],
+							"path": [
+								"webhook"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
